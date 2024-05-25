@@ -12,6 +12,8 @@ from datetime import datetime
 from scipy import interpolate
 from scipy.optimize import curve_fit
 
+import pulp
+
 import palettable
 import seaborn as sns
 import matplotlib
