@@ -1,20 +1,20 @@
 from utils_imports import *
 from utils_algorithm import *
 
-report = pd.DataFrame(columns=["id", "Energy_kcal", "Water_g", "Protein_g", "Fat_g", "CHO_g", "Fiber_g", "VA_ug", "VB1_mg", "VB2_mg", "VC_mg", "Ca_mg", "Fe_mg", "Zn_mg", "Ile_mg", "Leu_mg", "Lys_mg", "SAA_mg", "AAA_mg", "Thr_mg", "Trp_mg", "Val_mg", "price", "AAS", "Energy_Percentage", "Energy_error"])
+report = pd.DataFrame(columns=["id", "Energy_kcal", "Water_g", "Protein_g", "Fat_g", "CHO_g", "Fiber_g", "VA_ug", "VB1_mg", "VB2_mg", "VC_mg", "Ca_mg", "Fe_mg", "Zn_mg", "Ile_mg", "Leu_mg", "Lys_mg", "SAA_mg", "AAA_mg", "Thr_mg", "Trp_mg", "Val_mg", "price", "AAS", "Meal_Ratio", "Ratio_error"])
 
-to_preprocess = ['brk','lun','din']
-
-sex = 'female'
+sex = 'male'
 
 if sex=='male':
     ref = ref_male
 if sex=='female':
     ref = ref_female
 
+to_preprocess = ['brk','lun','din']
+
 for meal in to_preprocess:
     content = pd.read_csv(f'./data/diet/{sex}_{meal}.csv',index_col=False)
-    menu = pd.read_csv(f'./data/menu_{meal}.csv',index_col=False)
+    menu = pd.read_csv(f'./data/menu/menu_{meal}.csv',index_col=False)
 
     diet = [f'{meal}'] + [0.0] * 25
 
@@ -51,17 +51,17 @@ for meal in to_preprocess:
 report.loc[len(report)] = report.apply(lambda x: x.sum())
 report.loc[3, 'id'] = 'total'
 
-report.loc[report['id']=='brk', 'Energy_Percentage'] = round(report.loc[report['id']=='brk','Energy_kcal'].values[0] / report.loc[report['id']=='total','Energy_kcal'].values[0] *100, 2)
-report.loc[report['id']=='lun', 'Energy_Percentage'] = round(report.loc[report['id']=='lun','Energy_kcal'].values[0] / report.loc[report['id']=='total','Energy_kcal'].values[0] *100, 2)
-report.loc[report['id']=='din', 'Energy_Percentage'] = round(report.loc[report['id']=='din','Energy_kcal'].values[0] / report.loc[report['id']=='total','Energy_kcal'].values[0] *100, 2)
+report.loc[report['id']=='brk', 'Meal_Ratio'] = round(report.loc[report['id']=='brk','Energy_kcal'].values[0] / report.loc[report['id']=='total','Energy_kcal'].values[0] *100, 2)
+report.loc[report['id']=='lun', 'Meal_Ratio'] = round(report.loc[report['id']=='lun','Energy_kcal'].values[0] / report.loc[report['id']=='total','Energy_kcal'].values[0] *100, 2)
+report.loc[report['id']=='din', 'Meal_Ratio'] = round(report.loc[report['id']=='din','Energy_kcal'].values[0] / report.loc[report['id']=='total','Energy_kcal'].values[0] *100, 2)
 
-report.loc[report['id']=='brk', 'Energy_error'] = cal_error(report.loc[report['id']=='brk','Energy_Percentage'].values[0], 30)
-report.loc[report['id']=='lun', 'Energy_error'] = cal_error(report.loc[report['id']=='lun','Energy_Percentage'].values[0], 35)
-report.loc[report['id']=='din', 'Energy_error'] = cal_error(report.loc[report['id']=='din','Energy_Percentage'].values[0], 35)
+report.loc[report['id']=='brk', 'Ratio_error'] = cal_error(report.loc[report['id']=='brk','Meal_Ratio'].values[0], 30)
+report.loc[report['id']=='lun', 'Ratio_error'] = cal_error(report.loc[report['id']=='lun','Meal_Ratio'].values[0], 35)
+report.loc[report['id']=='din', 'Ratio_error'] = cal_error(report.loc[report['id']=='din','Meal_Ratio'].values[0], 35)
 
 Protein_Percentage = round(report.loc[report['id']=='total','Protein_g'].values[0] * 4 / report.loc[report['id']=='total','Energy_kcal'].values[0], 2)
 Fat_Percentage = round(report.loc[report['id']=='total','Fat_g'].values[0] * 9 / report.loc[report['id']=='total','Energy_kcal'].values[0], 2)
-CHO_Percentage = round(report.loc[report['id']=='total','CHO_g'].values[0] *4 / report.loc[report['id']=='total','Energy_kcal'].values[0], 2)
+CHO_Percentage = round(report.loc[report['id']=='total','CHO_g'].values[0] * 4 / report.loc[report['id']=='total','Energy_kcal'].values[0], 2)
 
 direct = [f'error_%'] + [0] * 25
 direct[1] = cal_error(report.loc[report['id']=='total','Energy_kcal'].values[0], ref[0])
@@ -84,7 +84,7 @@ comps = [0] * 61
 types = [False] * 5
 
 for meal in to_preprocess:
-    diet = pd.read_csv(f'./data/diet/male_{meal}.csv',index_col=False)
+    diet = pd.read_csv(f'./data/diet/{sex}_{meal}.csv',index_col=False)
     food = pd.read_csv(f'./data/menu/{meal}.csv',index_col=False)
 
     for index, row in diet.iterrows():

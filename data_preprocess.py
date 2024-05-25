@@ -3,7 +3,7 @@ from utils_imports import *
 dict = pd.read_csv('./data/all_composition.csv',index_col=False)
 
 to_preprocess = ['brk','lun','din']
-food_count = {'brk':34,'lun':59,'din':49}
+food_count = {'brk':33,'lun':59,'din':49}
 
 for meal in to_preprocess:
     content = pd.read_csv(f'./data/menu/{meal}.csv',index_col=False)
@@ -46,6 +46,6 @@ for meal in to_preprocess:
             
         menu.loc[len(menu)] = food
 
-    menu.to_csv(f'./data/menu_{meal}.csv',index=False)
+    menu.to_csv(f'./data/menu/menu_{meal}.csv',index=False)
                 
 
