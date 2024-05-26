@@ -1,4 +1,3 @@
-from utils_imports import *
 from utils_algorithm import *
 
 
@@ -100,7 +99,7 @@ def evaluation(data):
         for indexx, num in enumerate(diet):
             if num!=0:
                 for indexxx, roww in food.iterrows():
-                    if roww['id']==f'{meal}_{indexx+1}':
+                    if roww['id']==f'{indexx+1}':
                         comp = roww['composition']
                         count = roww['amount'] * num
                         comps[dict.loc[dict['Id']==comp,'Type'].index[0]]+=count
@@ -123,16 +122,20 @@ def evaluation(data):
     if Comps_report==False or Type_report==False or Energy_error>10 or Protein_error>20 or Fat_error>20 or CHO_error>13 or VA_error>30 or VB1_error>30 or VB2_error>30 or VC_error>30 or Ca_error>30 or Fe_error>30 or Zn_error>30 or Ratio_error_brk>16.7 or Ratio_error_lun>14.3 or Ratio_error_din>14.3:
         AAS_report = 0
 
-    # print(Energy_error, Protein_error, Fat_error, CHO_error, VA_error, VB1_error, VB2_error, VC_error, Ca_error, Fe_error, Zn_error, Ratio_error_brk, Ratio_error_lun, Ratio_error_din, AAS_report, Price_report, Type_report, Comps_report, runtime)
-    return [AAS_report]
+    if flag:
+        print(Energy_error, Protein_error, Fat_error, CHO_error, VA_error, VB1_error, VB2_error, VC_error, Ca_error, Fe_error, Zn_error, Ratio_error_brk, Ratio_error_lun, Ratio_error_din, AAS_report, Price_report, Type_report, Comps_report, runtime)
+    else:
+        # print(daily[0])
+        # print(Energy_error, Protein_error, Fat_error, CHO_error, VA_error, VB1_error, VB2_error, VC_error, Ca_error, Fe_error, Zn_error, Ratio_error_brk, Ratio_error_lun, Ratio_error_din, AAS_report, Price_report, Type_report, Comps_report, runtime)
+        return [AAS_report]
 
 if __name__=='__main__':
-    sex = 'male'
-    brk = pd.read_csv(f'./data/diet/{sex}_brk.csv',index_col=False)
+    flag = 1
+    brk = pd.read_csv(f'./data/{diet_folder}/{sex}_brk.csv',index_col=False)
     brk = brk['num'].tolist()
-    lun = pd.read_csv(f'./data/diet/{sex}_lun.csv',index_col=False)
+    lun = pd.read_csv(f'./data/{diet_folder}/{sex}_lun.csv',index_col=False)
     lun = lun['num'].tolist()
-    din = pd.read_csv(f'./data/diet/{sex}_din.csv',index_col=False)
+    din = pd.read_csv(f'./data/{diet_folder}/{sex}_din.csv',index_col=False)
     din = din['num'].tolist()
 
     data = brk + lun + din

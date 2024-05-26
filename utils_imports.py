@@ -7,8 +7,7 @@ import pandas as pd
 import random as rn
 from datetime import datetime
 
-import statistics
-from deap import base, creator, tools, algorithms
+# from deap import base, creator, tools, algorithms
 
 import palettable
 import seaborn as sns

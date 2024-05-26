@@ -1,4 +1,3 @@
-from utils_imports import *
 from utils_algorithm import *
 
 report = pd.DataFrame(columns=["id", "Energy_kcal", "Water_g", "Protein_g", "Fat_g", "CHO_g", "Fiber_g", "VA_ug", "VB1_mg", "VB2_mg", "VC_mg", "Ca_mg", "Fe_mg", "Zn_mg", "Ile_mg", "Leu_mg", "Lys_mg", "SAA_mg", "AAA_mg", "Thr_mg", "Trp_mg", "Val_mg", "price", "AAS", "Meal_Ratio", "Ratio_error"])
@@ -13,8 +12,8 @@ if sex=='female':
 to_preprocess = ['brk','lun','din']
 
 for meal in to_preprocess:
-    content = pd.read_csv(f'./data/diet/{sex}_{meal}.csv',index_col=False)
-    menu = pd.read_csv(f'./data/menu/menu_{meal}.csv',index_col=False)
+    content = pd.read_csv(f'./data/{diet_folder}/{sex}_{meal}.csv',index_col=False)
+    menu = pd.read_csv(f'./data/{menu_folder}/menu_{meal}.csv',index_col=False)
 
     diet = [f'{meal}'] + [0.0] * 25
 
@@ -84,17 +83,17 @@ comps = [0] * 61
 types = [False] * 5
 
 for meal in to_preprocess:
-    diet = pd.read_csv(f'./data/diet/{sex}_{meal}.csv',index_col=False)
-    food = pd.read_csv(f'./data/menu/{meal}.csv',index_col=False)
+    diet = pd.read_csv(f'./data/{diet_folder}/{sex}_{meal}.csv',index_col=False)
+    food = pd.read_csv(f'./data/{menu_folder}/{meal}.csv',index_col=False)
 
-    for index, row in diet.iterrows():
-        if row['num']!=0:
-            for indexx, roww in food.iterrows():
-                if roww['id']==f'{meal}_{row["id"]}':
-                    comp = roww['composition']
-                    count = roww['amount'] * row['num']
-                    comps[dict.loc[dict['Id']==comp,'Type'].index[0]]+=count
-                    types[dict.loc[dict['Id']==comp,'Type'].values[0]-1] = True
+    diet = diet['num'].tolist()
+    for indexx, roww in food.iterrows():
+        if diet[roww['id']-1]!=0: # origin
+            count = roww['amount'] * diet[roww['id']-1]
+        # if diet[mapp.index(roww['id'])]!=0: # new
+        #     count = roww['amount'] * diet[mapp.index(roww['id'])]
+            comps[roww['pos']] += count
+            types[roww['type']-1] = True
 
 count = 0
 report.loc[5, 'id'] = ''
