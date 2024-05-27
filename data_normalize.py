@@ -1,4 +1,3 @@
-from utils_imports import *
 from utils_algorithm import *
 
 df = pd.read_csv(f'./data/menu.csv',index_col=False)

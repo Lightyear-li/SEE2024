@@ -5,7 +5,6 @@ def evaluation(data):
     start_time = time.time()
     report = pd.DataFrame(columns=["id", "Energy_kcal", "Water_g", "Protein_g", "Fat_g", "CHO_g", "Fiber_g", "VA_ug", "VB1_mg", "VB2_mg", "VC_mg", "Ca_mg", "Fe_mg", "Zn_mg", "Ile_mg", "Leu_mg", "Lys_mg", "SAA_mg", "AAA_mg", "Thr_mg", "Trp_mg", "Val_mg", "price", "AAS", "Meal_Ratio", "Ratio_error"])
     
-    sex='male'
     brk=data[:33]
     lun=data[33:92]
     din=data[92:]
